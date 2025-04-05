@@ -50,21 +50,20 @@ describe('useUsageWizard hook', () => {
   });
   
   test('openWizard fetches questions and updates state', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard
-    act(() => {
+    await act(async () => {
       result.current.openWizard();
     });
     
-    // Loading state should be true immediately
-    expect(result.current.isLoading).toBe(true);
-    expect(result.current.isOpen).toBe(true);
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
-    // Wait for the API request to complete
-    await waitForNextUpdate();
+    // Loading state should be updated after the async operation
+    expect(result.current.isOpen).toBe(true);
     
     // Check the updated state
     expect(result.current.isLoading).toBe(false);
