@@ -1,16 +1,9 @@
 
 import json
+import pytest
 from fastapi.testclient import TestClient
-from app.main import app
 
-client = TestClient(app)
-
-mock_resources = [
-    {"name": "web_server", "resource_type": "aws_instance", "monthlyCost": "50.00"},
-    {"name": "function_a", "resource_type": "aws_lambda_function", "monthlyCost": "15.00"}
-]
-
-def test_generate_usage():
+def test_generate_usage(client, mock_resources):
     payload = {
         "resources": mock_resources,
         "answers": ["24/7", "about 2 million"]
@@ -23,7 +16,7 @@ def test_generate_usage():
     assert "function_a" in usage
     assert usage["function_a"]["monthly_requests"] == 2000000
 
-def test_copilot_response():
+def test_copilot_response(client, mock_resources):
     payload = {
         "question": "Why is web_server so expensive?",
         "resources": mock_resources

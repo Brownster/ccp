@@ -93,8 +93,26 @@ D --> E[Post AI summary on PR]
 
 ```bash
 cd backend
+pip install -r requirements.txt
+pip install -r requirements-test.txt
 pytest --cov=app --cov-report=term-missing
 ```
+
+### CI/CD Tests
+
+The project uses GitHub Actions for CI/CD. If tests are failing in GitHub Actions but passing locally:
+
+- Check if all dependencies are in requirements.txt and requirements-test.txt
+- Make sure code doesn't rely on local environment variables without fallbacks
+- Review any environment-specific code that might behave differently in CI
+
+### Recent Fixes
+
+- Added python-dotenv to requirements.txt
+- Made dotenv import optional with fallback
+- Added test fixtures in conftest.py for better test organization
+- Updated test files to use fixtures
+- Added additional test dependencies to CI workflow
 
 ---
 

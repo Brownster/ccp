@@ -1,11 +1,7 @@
 import json
 import pytest
-from fastapi.testclient import TestClient
-from app.main import app
 
-client = TestClient(app)
-
-def test_suggest_usage_fallback():
+def test_suggest_usage_fallback(client):
     # Should fallback to 100 if model call fails or response is mocked
     resource = {
         "name": "aws_instance.example",
@@ -17,15 +13,15 @@ def test_suggest_usage_fallback():
     data = response.json()
     assert data["suggested_usage"] == 100
 
-def test_upload_invalid_type():
+def test_upload_invalid_type(client):
     response = client.post("/upload", files={"file": ("bad.txt", b"not a valid format", "text/plain")})
     assert response.status_code == 400
 
-def test_download_missing():
+def test_download_missing(client):
     response = client.get("/download/badid?format=json")
     assert response.status_code == 404
 
-def test_compare_missing_previous():
+def test_compare_missing_previous(client):
     payload = {
         "uid": "doesnotexist",
         "current": [{"name": "aws_lambda", "adjustedCost": "20.00"}]

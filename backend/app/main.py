@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 
 from app.routers import upload, usage, copilot, templates
 
-# Load environment variables
-load_dotenv()
+# Load environment variables if dotenv is available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # In CI environments, dotenv might not be needed if env vars are set directly
+    print("dotenv not available, skipping load_dotenv()")
 
 # Initialize FastAPI app
 app = FastAPI(
