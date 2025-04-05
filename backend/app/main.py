@@ -2,14 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from app.routers import upload, usage, copilot
+from app.routers import upload, usage, copilot, templates
 
 # Load environment variables
 load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Terraform Cost Estimator API",
+    title="Cloud Cost Predictor API",
     description="Predict your cloud costs before deployment using Terraform, Infracost, and AI",
     version="1.0.0"
 )
@@ -27,12 +27,13 @@ app.add_middleware(
 app.include_router(upload.router)
 app.include_router(usage.router)
 app.include_router(copilot.router)
+app.include_router(templates.router)
 
 # Root endpoint
 @app.get("/")
 async def root():
     return {
-        "message": "Terraform Cost Estimator API",
+        "message": "Cloud Cost Predictor API",
         "docs": "/docs",
         "endpoints": {
             "upload": "POST /upload",
@@ -41,6 +42,11 @@ async def root():
             "usage-clarify": "POST /usage-clarify",
             "usage-generate": "POST /usage-generate",
             "copilot": "POST /copilot",
-            "analyze-diff": "POST /analyze-diff"
+            "analyze-diff": "POST /analyze-diff",
+            "templates": "GET /templates",
+            "template-by-id": "GET /templates/{template_id}",
+            "create-template": "POST /templates",
+            "delete-template": "DELETE /templates/{template_id}",
+            "apply-template": "POST /apply-template"
         }
     }

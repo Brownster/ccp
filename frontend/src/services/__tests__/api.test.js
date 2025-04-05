@@ -126,14 +126,37 @@ describe('API Service', () => {
   });
 
   describe('generateUsage', () => {
-    test('calls the usage-generate endpoint with correct data', async () => {
+    test('calls the usage-generate endpoint with new format data', async () => {
+      // Mock data
+      const mockData = {
+        resources: mockResources,
+        questions: ['Question 1?'],
+        answers: ['Answer 1']
+      };
+      // Mock usage data
+      const mockUsage = { test_resource: { monthly_hours: 720 } };
+      fetch.mockReturnValueOnce(mockSuccessResponse({ usage: mockUsage }));
+
+      // Call the function with new format
+      const result = await generateUsage(mockData);
+
+      // Assertions
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/usage-generate'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mockData)
+      });
+      expect(result).toEqual(mockUsage);
+    });
+
+    test('calls the usage-generate endpoint with legacy format data', async () => {
       // Mock answers
       const mockAnswers = [{ resource_name: 'test', answer: 'Answer 1' }];
       // Mock usage data
       const mockUsage = { test_resource: { monthly_hours: 720 } };
       fetch.mockReturnValueOnce(mockSuccessResponse({ usage: mockUsage }));
 
-      // Call the function
+      // Call the function with legacy format
       const result = await generateUsage(mockResources, mockAnswers);
 
       // Assertions
@@ -150,7 +173,7 @@ describe('API Service', () => {
       fetch.mockReturnValueOnce(mockSuccessResponse({}));
 
       // Call the function
-      const result = await generateUsage(mockResources, []);
+      const result = await generateUsage({ resources: mockResources, questions: [], answers: [] });
 
       // Should return empty object
       expect(result).toEqual({});

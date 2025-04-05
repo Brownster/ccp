@@ -1,15 +1,15 @@
 import React from 'react';
 import { UploadForm } from './components/UploadForm';
 import { ResourceGroup } from './components/ResourceGroup';
-import { UsageWizardModal } from './components/UsageWizardModal';
+import { EnhancedWizardModal } from './components/EnhancedWizardModal';
 import { CopilotSidebar } from './components/CopilotSidebar';
 
 import { useResources } from './hooks/useResources';
-import { useUsageWizard } from './hooks/useUsageWizard';
+import { useEnhancedWizard } from './hooks/useEnhancedWizard';
 import { useCopilot } from './hooks/useCopilot';
 
 /**
- * Main component for the Terraform Cost Estimator
+ * Main component for the Cloud Cost Predictor
  */
 export default function CostEstimator() {
   // Resource management hook
@@ -27,8 +27,8 @@ export default function CostEstimator() {
     applyUsageData
   } = useResources();
 
-  // Usage wizard hook
-  const wizard = useUsageWizard(resources, ({ usage }) => {
+  // Enhanced usage wizard hook
+  const wizard = useEnhancedWizard(resources, ({ usage }) => {
     applyUsageData(usage);
   });
 
@@ -76,20 +76,17 @@ export default function CostEstimator() {
         </>
       )}
       
-      {/* Usage wizard modal */}
-      <UsageWizardModal
-        isOpen={wizard.isOpen}
-        questions={wizard.questions}
-        answers={wizard.answers}
-        currentStep={wizard.currentStep}
-        isLoading={wizard.isLoading}
-        error={wizard.error}
-        onAnswerChange={wizard.updateAnswer}
-        onNext={wizard.handleNext}
-        onPrevious={wizard.handlePrevious}
-        onClose={wizard.closeWizard}
-        getCurrentQuestion={wizard.getCurrentQuestion}
-      />
+      {/* Enhanced usage wizard modal */}
+      {wizard.isOpen && (
+        <EnhancedWizardModal
+          resources={resources}
+          onFinish={({ usage }) => {
+            if (usage) {
+              applyUsageData(usage);
+            }
+          }}
+        />
+      )}
       
       {/* Copilot sidebar */}
       <CopilotSidebar

@@ -15,7 +15,7 @@ def test_generate_usage():
         "resources": mock_resources,
         "answers": ["24/7", "about 2 million"]
     }
-    response = client.post("/generate-usage", json=payload)
+    response = client.post("/usage-generate", json=payload)
     assert response.status_code == 200
     usage = response.json()["usage"]
     assert "web_server" in usage

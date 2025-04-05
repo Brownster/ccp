@@ -3,7 +3,15 @@
  */
 
 // Use environment variable for API URL or fallback to localhost
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+let API_URL = 'http://localhost:8000';
+// Safe check for Vite environment
+try {
+  if (typeof import !== 'undefined' && import.meta && import.meta.env) {
+    API_URL = import.meta.env.VITE_API_URL || API_URL;
+  }
+} catch (e) {
+  // In test environment, this will fail, so we use the default
+}
 
 /**
  * Upload a Terraform file for cost estimation
@@ -69,14 +77,20 @@ export async function getClarifyQuestions(resources) {
 
 /**
  * Generate usage data from answers
- * @param {Array} resources - List of resources
- * @param {Array} answers - List of answers to questions
+ * @param {Object} data - Object containing resources, questions, and answers
+ * @param {Array} data.resources - List of resources
+ * @param {Array} data.questions - List of questions
+ * @param {Array} data.answers - List of answers to questions
+ * @param {Array} [answers] - Legacy format: List of answer objects with resource_name
  */
-export async function generateUsage(resources, answers) {
+export async function generateUsage(data, answers) {
+  // Handle both new and legacy format
+  const requestData = answers ? { resources: data, answers } : data;
+
   const response = await fetch(`${API_URL}/usage-generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ resources, answers }),
+    body: JSON.stringify(requestData),
   });
   
   if (!response.ok) {
@@ -84,8 +98,8 @@ export async function generateUsage(resources, answers) {
     throw new Error(error.error || 'Failed to generate usage');
   }
   
-  const data = await response.json();
-  return data.usage || {};
+  const responseData = await response.json();
+  return responseData.usage || {};
 }
 
 /**
@@ -179,4 +193,91 @@ export async function analyzeDiff(diff) {
   
   const data = await response.json();
   return data.summary || 'Could not analyze diff.';
+}
+
+/**
+ * Get all available templates
+ */
+export async function getTemplates() {
+  const response = await fetch(`${API_URL}/templates`);
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to get templates');
+  }
+  
+  const data = await response.json();
+  return data.templates || [];
+}
+
+/**
+ * Get a template by ID
+ * @param {string} templateId - Template ID
+ */
+export async function getTemplateById(templateId) {
+  const response = await fetch(`${API_URL}/templates/${templateId}`);
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to get template');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Create a new template
+ * @param {Object} template - Template object
+ */
+export async function createTemplate(template) {
+  const response = await fetch(`${API_URL}/templates`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(template),
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to create template');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Delete a template
+ * @param {string} templateId - Template ID
+ */
+export async function deleteTemplate(templateId) {
+  const response = await fetch(`${API_URL}/templates/${templateId}`, {
+    method: 'DELETE'
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to delete template');
+  }
+  
+  return response.json();
+}
+
+/**
+ * Apply a template to resources
+ * @param {string} templateId - Template ID
+ * @param {Array} resources - Resources to apply the template to
+ */
+export async function applyTemplate(templateId, resources) {
+  const response = await fetch(`${API_URL}/apply-template`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ template_id: templateId, resources }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to apply template');
+  }
+  
+  const data = await response.json();
+  return data.usage || {};
 }

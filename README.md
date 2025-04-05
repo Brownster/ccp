@@ -62,6 +62,10 @@ docker-compose up --build
 - **AI-Powered Assistance**: Get recommendations and insights from the AI copilot
 - **Terraform Integration**: Works directly with your existing Terraform code
 - **Version Comparison**: Compare costs between different infrastructure versions
+- **Usage Templates**: Save and apply common usage patterns with templates
+- **Interactive Dashboard**: Visualize costs with charts and summary cards
+- **Advanced Resource Management**: Search, filter, and sort resources
+- **Scenario Comparison**: Compare different configuration scenarios
 
 ---
 
@@ -76,6 +80,11 @@ docker-compose up --build
 | `/usage-generate`     | Converts answers into usage JSON      |
 | `/copilot`            | Chat sidebar with AI                  |
 | `/analyze-diff`       | PR comment generation from diff       |
+| `/templates`          | Get all available usage templates     |
+| `/templates/{id}`     | Get a specific template by ID         |
+| `/apply-template`     | Apply a template to resources         |
+
+For detailed API documentation, see [docs/API.md](docs/API.md)
 
 ---
 
