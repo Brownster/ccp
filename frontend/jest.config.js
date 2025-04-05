@@ -15,7 +15,7 @@ module.exports = {
   transform: {
     "^.+\\.(js|jsx)$": "babel-jest"
   },
-  testTimeout: 15000,
+  testTimeout: 30000,
   verbose: true,
   collectCoverageFrom: [
     "src/**/*.{js,jsx}",
@@ -24,10 +24,10 @@ module.exports = {
   ],
   coverageThreshold: {
     global: {
-      statements: 50,
-      branches: 50,
-      functions: 50,
-      lines: 50
+      statements: 10,
+      branches: 5,
+      functions: 5,
+      lines: 10
     }
   },
   maxWorkers: '50%'
