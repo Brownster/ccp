@@ -130,7 +130,12 @@ export function EnhancedWizardModal({ resources, onFinish }) {
     const fetchWizard = async () => {
       setLoading(true);
       try {
-        const response = await fetch(import.meta.env.VITE_API_URL + '/usage-wizard', {
+        // Get API URL from environment in a way that works with both Vite and Jest
+        const API_URL = typeof import !== 'undefined' && import.meta?.env?.VITE_API_URL || 
+                      process.env.VITE_API_URL || 
+                      'http://localhost:8000';
+                      
+        const response = await fetch(API_URL + '/usage-wizard', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ resources }),
@@ -183,7 +188,12 @@ export function EnhancedWizardModal({ resources, onFinish }) {
   const handleFinish = async () => {
     setLoading(true);
     try {
-      const response = await fetch(import.meta.env.VITE_API_URL + '/usage-generate', {
+      // Get API URL from environment in a way that works with both Vite and Jest
+      const API_URL = typeof import !== 'undefined' && import.meta?.env?.VITE_API_URL || 
+                    process.env.VITE_API_URL || 
+                    'http://localhost:8000';
+                    
+      const response = await fetch(API_URL + '/usage-generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

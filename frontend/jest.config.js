@@ -1,11 +1,16 @@
 module.exports = {
+  // Handle ES modules
+  transformIgnorePatterns: [
+    "node_modules/(?!(.*(react-syntax-highlighter|refractor))/)"
+  ],
   testEnvironment: "jsdom",
   moduleNameMapper: {
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
     "^@/(.*)$": "<rootDir>/src/$1"
   },
   setupFilesAfterEnv: [
-    "<rootDir>/src/setupTests.js"
+    "<rootDir>/src/setupTests.js",
+    "<rootDir>/jest.setup.js"
   ],
   transform: {
     "^.+\\.(js|jsx)$": "babel-jest"
