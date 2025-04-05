@@ -79,17 +79,17 @@ describe('useUsageWizard hook', () => {
     // Mock API error
     getClarifyQuestions.mockRejectedValue(new Error('API error'));
     
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
     
-    // Wait for the API request to complete
-    await waitForNextUpdate();
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Check the updated state
     expect(result.current.isLoading).toBe(false);
@@ -98,15 +98,17 @@ describe('useUsageWizard hook', () => {
   });
   
   test('closeWizard resets the state', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Verify questions were loaded
     expect(result.current.questions.length).toBeGreaterThan(0);
@@ -124,15 +126,17 @@ describe('useUsageWizard hook', () => {
   });
   
   test('updateAnswer updates a specific answer', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Update an answer
     act(() => {
@@ -145,15 +149,17 @@ describe('useUsageWizard hook', () => {
   });
   
   test('handleNext advances to next question', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Move to the next question
     act(() => {
@@ -224,15 +230,17 @@ describe('useUsageWizard hook', () => {
   });
   
   test('handlePrevious goes back to previous question', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Move to the next question
     act(() => {
@@ -250,15 +258,17 @@ describe('useUsageWizard hook', () => {
   });
   
   test('handlePrevious does nothing on first question', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Try to go to previous question from first question
     act(() => {
@@ -270,15 +280,17 @@ describe('useUsageWizard hook', () => {
   });
   
   test('getCurrentQuestion returns the current question', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useUsageWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Check current question is correct
     expect(result.current.getCurrentQuestion()).toEqual(mockQuestions[0]);
