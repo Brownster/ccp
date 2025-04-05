@@ -57,8 +57,8 @@ const WizardQuestion = ({ question, answer, onChange }) => (
 const WizardNavigation = ({ 
   onPrevious, 
   onNext, 
-  onSkip, a
-  pplyTemplate, 
+  onSkip,
+  applyTemplate, 
   canGoBack, 
   isLastStep,
   loading 
