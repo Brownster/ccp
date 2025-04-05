@@ -2,15 +2,55 @@
  * API service for interacting with the backend
  */
 
-// Use environment variable for API URL or fallback to localhost
-let API_URL = 'http://localhost:8000';
+// Function to get API URL from various sources with priority
+function getApiUrl() {
+  // 1. Check localStorage for user-configured settings (highest priority)
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const savedSettings = window.localStorage.getItem('appSettings');
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+      if (settings.apiUrl) return settings.apiUrl;
+    }
+  }
+  
+  // 2. Check window.ENV (set at runtime)
+  if (typeof window !== 'undefined' && window.ENV?.VITE_API_URL) {
+    return window.ENV.VITE_API_URL;
+  }
+  
+  // 3. Check Node.js process.env (for SSR/build)
+  if (typeof process !== 'undefined' && process.env?.VITE_API_URL) {
+    return process.env.VITE_API_URL;
+  }
+  
+  // 4. Fallback to default
+  return 'http://localhost:8000';
+}
 
-// Safe check for environment
-// This approach works in both Vite and Jest environments
-if (typeof process !== 'undefined' && process.env && process.env.VITE_API_URL) {
-  API_URL = process.env.VITE_API_URL;
-} else if (typeof window !== 'undefined' && window.ENV && window.ENV.VITE_API_URL) {
-  API_URL = window.ENV.VITE_API_URL;
+// Initialize API URL
+let API_URL = getApiUrl();
+
+/**
+ * Helper function to get API headers with auth keys if available
+ */
+function getApiHeaders() {
+  let headers = { 'Content-Type': 'application/json' };
+  
+  // Add API keys from settings if available
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const savedSettings = window.localStorage.getItem('appSettings');
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+      if (settings.geminiApiKey) {
+        headers['X-Gemini-Key'] = settings.geminiApiKey;
+      }
+      if (settings.infracostApiKey) {
+        headers['X-Infracost-Key'] = settings.infracostApiKey;
+      }
+    }
+  }
+  
+  return headers;
 }
 
 /**
@@ -21,7 +61,10 @@ export async function uploadTerraform(file) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch(`${API_URL}/upload`, {
+  // Get the most up-to-date API URL
+  const apiUrl = getApiUrl();
+
+  const response = await fetch(`${apiUrl}/upload`, {
     method: 'POST',
     body: formData,
   });
@@ -40,9 +83,13 @@ export async function uploadTerraform(file) {
  * @param {string} llm - LLM to use for suggestion (default: "gemini")
  */
 export async function getUsageAssumption(resource, llm = 'gemini') {
-  const response = await fetch(`${API_URL}/suggest-usage`, {
+  // Get fresh API URL and headers
+  const apiUrl = getApiUrl();
+  const headers = getApiHeaders();
+  
+  const response = await fetch(`${apiUrl}/suggest-usage`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
     body: JSON.stringify({ resource, llm }),
   });
   
@@ -60,9 +107,13 @@ export async function getUsageAssumption(resource, llm = 'gemini') {
  * @param {Array} resources - List of resources
  */
 export async function getClarifyQuestions(resources) {
-  const response = await fetch(`${API_URL}/usage-clarify`, {
+  // Get fresh API URL and headers
+  const apiUrl = getApiUrl();
+  const headers = getApiHeaders();
+  
+  const response = await fetch(`${apiUrl}/usage-clarify`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
     body: JSON.stringify({ resources }),
   });
   
@@ -87,9 +138,13 @@ export async function generateUsage(data, answers) {
   // Handle both new and legacy format
   const requestData = answers ? { resources: data, answers } : data;
 
-  const response = await fetch(`${API_URL}/usage-generate`, {
+  // Get fresh API URL and headers
+  const apiUrl = getApiUrl();
+  const headers = getApiHeaders();
+
+  const response = await fetch(`${apiUrl}/usage-generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
     body: JSON.stringify(requestData),
   });
   
@@ -108,9 +163,13 @@ export async function generateUsage(data, answers) {
  * @param {Array} resources - List of resources for context
  */
 export async function askCopilot(question, resources) {
-  const response = await fetch(`${API_URL}/copilot`, {
+  // Get fresh API URL and headers
+  const apiUrl = getApiUrl();
+  const headers = getApiHeaders();
+  
+  const response = await fetch(`${apiUrl}/copilot`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
     body: JSON.stringify({ question, resources }),
   });
   
