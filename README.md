@@ -56,7 +56,7 @@ Time:        2.85 s
 ```bash
 # Backend (Terminal 1)
 cd backend
-cp .env.example .env  # Add your Google Gemini key
+cp .env.example .env  # Optional: Add your Google Gemini key
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
@@ -64,22 +64,25 @@ uvicorn app.main:app --reload
 ```bash
 # Frontend (Terminal 2)
 cd frontend
-cp .env.example .env  # Point VITE_API_URL to http://localhost:8000
 npm install
 npm run dev
 ```
+
+> **Note:** API keys can now be configured directly in the UI! When you first launch the application, you'll be prompted to configure your backend URL and API keys.
 
 ---
 
 ## 🐳 Docker Setup
 
 ```bash
-cp .env.example .env
+cp .env.example .env  # Optional: Add environment variables
 docker-compose up --build
 ```
 
 - Frontend: http://localhost:3000
 - Backend: http://localhost:8000
+
+> **Note:** For Docker deployments, you can either set API keys in the `.env` file or configure them in the UI after startup.
 
 ---
 
@@ -94,6 +97,7 @@ docker-compose up --build
 - **Interactive Dashboard**: Visualize costs with charts and summary cards
 - **Advanced Resource Management**: Search, filter, and sort resources
 - **Scenario Comparison**: Compare different configuration scenarios
+- **Bring Your Own Keys**: Configure API keys and endpoints directly in the UI
 
 ---
 
@@ -156,6 +160,30 @@ For more details, see [TESTING.md](TESTING.md).
 ## 🛠️ Development
 
 For setup instructions and development guidelines, see [SETUP.md](SETUP.md).
+
+---
+
+## 🔑 API Key Management
+
+API keys can now be configured in multiple ways:
+
+### 1. UI Configuration (Recommended for Users)
+- Settings button in the top-right corner
+- Configure backend URL, Gemini API key, and Infracost API key
+- Settings are saved in browser localStorage
+- First-time users are automatically prompted
+
+### 2. Environment Variables (CI/CD and Development)
+- Backend: `.env` file or environment variables
+  - `GEMINI_API_KEY` - For Google Gemini AI
+  - `INFRACOST_API_KEY` - For Infracost cost estimates
+- Frontend: `.env` file
+  - `VITE_API_URL` - Backend API URL
+
+### 3. Request Headers (API Integration)
+The backend also accepts API keys via request headers:
+- `X-Gemini-Key` - For Google Gemini AI
+- `X-Infracost-Key` - For Infracost
 
 ---
 

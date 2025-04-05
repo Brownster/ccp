@@ -9,9 +9,10 @@ class InfracostService:
     """
     Service for handling Infracost operations and Terraform cost estimations
     """
-    def __init__(self, upload_dir: Path):
+    def __init__(self, upload_dir: Path, api_key: str = None):
         self.upload_dir = upload_dir
         self.upload_dir.mkdir(exist_ok=True)
+        self.api_key = api_key
     
     def process_terraform_file(self, 
                              file_path: Path, 

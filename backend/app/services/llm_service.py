@@ -1,4 +1,6 @@
+import os
 from typing import Dict, List, Any, Optional
+
 try:
     from langchain_google_genai import ChatGoogleGenerativeAI
 except ImportError:
@@ -7,6 +9,7 @@ except ImportError:
         def __init__(self, **kwargs):
             self.model = kwargs.get('model', 'gemini-pro')
             self.temperature = kwargs.get('temperature', 0.3)
+            self.api_key = kwargs.get('api_key')
         
         def invoke(self, text):
             # Return a mock response for testing
@@ -62,12 +65,18 @@ class LLMService:
     """
     Service for LLM interactions using LangChain and Google Generative AI
     """
-    def __init__(self, model: str = "gemini-pro", temperature: float = 0.3):
+    def __init__(self, model: str = "gemini-pro", temperature: float = 0.3, api_key: str = None):
         """
-        Initialize the LLM service with specified model and temperature
+        Initialize the LLM service with specified model, temperature, and API key
+        
+        Args:
+            model: The name of the model to use
+            temperature: Model temperature parameter
+            api_key: Optional API key, falls back to environment variable
         """
         self.model = model
         self.temperature = temperature
+        self.api_key = api_key
         self._llm = None # Lazy initialization
     
     @property
@@ -76,9 +85,13 @@ class LLMService:
         Lazy-loaded LLM instance
         """
         if self._llm is None:
+            # Determine API key (header, environment, or None for testing)
+            api_key = self.api_key or os.environ.get("GEMINI_API_KEY")
+            
             self._llm = ChatGoogleGenerativeAI(
                 model=self.model, 
-                temperature=self.temperature
+                temperature=self.temperature,
+                google_api_key=api_key
             )
         return self._llm
     
