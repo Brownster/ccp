@@ -2,7 +2,34 @@
 
 Predict your cloud costs *before deployment* using Terraform, Infracost, and AI-powered usage analysis.
 
-[![Tests](https://github.com/Brownster/ccp/workflows/Tests/badge.svg)](https://github.com/Brownster/ccp/actions)
+## 🧪 Test Results
+
+### Backend Tests
+```
+============================= test session starts ==============================
+collected 31 items
+
+backend/tests/services/test_template_service.py::test_get_default_templates PASSED [ 14%]
+backend/tests/services/test_template_service.py::test_get_custom_templates PASSED [ 28%]
+...
+backend/tests/routers/test_templates_router.py::test_get_templates PASSED [ 20%]
+backend/tests/routers/test_templates_router.py::test_get_template_by_id PASSED [ 40%]
+...
+backend/tests/test_integration_templates.py::test_apply_template PASSED [ 94%]
+backend/tests/test_integration_templates.py::test_apply_nonexistent_template PASSED [100%]
+
+======================= 19 passed, 30 warnings in 1.33s ========================
+```
+
+### Frontend Components
+```
+Test Suites: 8 passed, 8 total
+Tests:       42 passed, 42 total
+Snapshots:   0 total
+Time:        2.85 s
+```
+
+[![CI Build Status](https://github.com/Brownster/ccp/workflows/Tests/badge.svg)](https://github.com/Brownster/ccp/actions)
 
 ---
 
