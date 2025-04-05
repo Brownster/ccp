@@ -130,10 +130,17 @@ export function EnhancedWizardModal({ resources, onFinish }) {
     const fetchWizard = async () => {
       setLoading(true);
       try {
-        // Get API URL from environment in a way that works with both Vite and Jest
-        const API_URL = typeof import !== 'undefined' && import.meta?.env?.VITE_API_URL || 
-                      process.env.VITE_API_URL || 
-                      'http://localhost:8000';
+        // Get API URL with fallbacks for different environments
+        let API_URL = 'http://localhost:8000';
+        
+        // Check for window.ENV first (used in tests)
+        if (typeof window !== 'undefined' && window.ENV && window.ENV.VITE_API_URL) {
+          API_URL = window.ENV.VITE_API_URL;
+        } 
+        // Check for Node.js environment
+        else if (typeof process !== 'undefined' && process.env && process.env.VITE_API_URL) {
+          API_URL = process.env.VITE_API_URL;
+        }
                       
         const response = await fetch(API_URL + '/usage-wizard', {
           method: 'POST',
@@ -188,10 +195,17 @@ export function EnhancedWizardModal({ resources, onFinish }) {
   const handleFinish = async () => {
     setLoading(true);
     try {
-      // Get API URL from environment in a way that works with both Vite and Jest
-      const API_URL = typeof import !== 'undefined' && import.meta?.env?.VITE_API_URL || 
-                    process.env.VITE_API_URL || 
-                    'http://localhost:8000';
+      // Get API URL with fallbacks for different environments
+      let API_URL = 'http://localhost:8000';
+      
+      // Check for window.ENV first (used in tests)
+      if (typeof window !== 'undefined' && window.ENV && window.ENV.VITE_API_URL) {
+        API_URL = window.ENV.VITE_API_URL;
+      } 
+      // Check for Node.js environment
+      else if (typeof process !== 'undefined' && process.env && process.env.VITE_API_URL) {
+        API_URL = process.env.VITE_API_URL;
+      }
                     
       const response = await fetch(API_URL + '/usage-generate', {
         method: 'POST',
