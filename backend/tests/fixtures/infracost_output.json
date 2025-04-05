@@ -1,0 +1,74 @@
+{
+  "version": "0.2",
+  "currency": "USD",
+  "projects": [
+    {
+      "name": "example_project",
+      "metadata": {
+        "path": "/path/to/terraform"
+      },
+      "breakdown": {
+        "resources": [
+          {
+            "name": "aws_instance.web_server",
+            "metadata": {
+              "calls": [],
+              "filename": "main.tf"
+            },
+            "hourlyCost": "0.1233",
+            "monthlyCost": "90.00",
+            "resource_type": "aws_instance"
+          },
+          {
+            "name": "aws_lambda_function.processor",
+            "metadata": {
+              "calls": [],
+              "filename": "lambda.tf"
+            },
+            "hourlyCost": null,
+            "monthlyCost": "25.37",
+            "resource_type": "aws_lambda_function"
+          },
+          {
+            "name": "aws_dynamodb_table.data_store",
+            "metadata": {
+              "calls": [],
+              "filename": "database.tf"
+            },
+            "hourlyCost": "0.0703",
+            "monthlyCost": "51.30",
+            "resource_type": "aws_dynamodb_table"
+          }
+        ],
+        "totalHourlyCost": "0.1936",
+        "totalMonthlyCost": "166.67"
+      },
+      "diff": {
+        "resources": [],
+        "totalHourlyCost": "0",
+        "totalMonthlyCost": "0"
+      },
+      "summary": {
+        "totalDetectedResources": 5,
+        "totalSupportedResources": 3,
+        "totalUnsupportedResources": 0,
+        "totalUsageBasedResources": 3,
+        "totalNoPriceResources": 0,
+        "unsupportedResourceCounts": {},
+        "noPriceResourceCounts": {}
+      }
+    }
+  ],
+  "totalHourlyCost": "0.1936",
+  "totalMonthlyCost": "166.67",
+  "timeGenerated": "2025-05-04T15:30:45Z",
+  "summary": {
+    "totalDetectedResources": 5,
+    "totalSupportedResources": 3,
+    "totalUnsupportedResources": 0,
+    "totalUsageBasedResources": 3,
+    "totalNoPriceResources": 0,
+    "unsupportedResourceCounts": {},
+    "noPriceResourceCounts": {}
+  }
+}

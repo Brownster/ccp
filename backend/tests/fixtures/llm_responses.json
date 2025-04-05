@@ -1,0 +1,40 @@
+{
+  "suggest_usage_percentage": {
+    "aws_instance.web_server": "75",
+    "aws_lambda_function.processor": "60",
+    "aws_dynamodb_table.data_store": "85"
+  },
+  "copilot_responses": {
+    "cost_reduction": "Looking at your resources, I see potential savings in your EC2 instance. Consider using a reserved instance if this is a long-term workload, which could save about 30-40% on costs. Additionally, your Lambda function seems to be provisioned for more memory than might be needed. Reducing memory allocation could lower costs further.",
+    "explain_resources": "Your infrastructure consists of 3 primary resources:\n1. An EC2 web server costing $90/month, likely running a web application\n2. A Lambda function costing $25.37/month, which appears to be processing data\n3. A DynamoDB table costing $51.30/month for data storage\n\nTotal estimated monthly cost is $166.67."
+  },
+  "clarify_questions": [
+    {
+      "resource_name": "aws_instance.web_server",
+      "question": "Is this EC2 instance running 24/7 or only during business hours?"
+    },
+    {
+      "resource_name": "aws_lambda_function.processor",
+      "question": "Approximately how many invocations per month do you expect for this Lambda function?"
+    },
+    {
+      "resource_name": "aws_dynamodb_table.data_store",
+      "question": "What are your expected read and write capacity units for this DynamoDB table?"
+    }
+  ],
+  "usage_assumptions": {
+    "aws_instance.web_server": {
+      "monthly_hours": 480
+    },
+    "aws_lambda_function.processor": {
+      "monthly_requests": 1500000,
+      "request_duration_ms": 500
+    },
+    "aws_dynamodb_table.data_store": {
+      "monthly_read_request_units": 5000000,
+      "monthly_write_request_units": 1000000,
+      "storage_gb": 100
+    }
+  },
+  "diff_analysis": "## Cost Change Analysis\n\n**Overall Change: +$32.45/month (+19.5%)**\n\n### Significant Increases\n- `aws_lambda_function.processor`: +$15.20/month (+60%)\n  - Increase due to higher request count\n\n### Recommendations\n- Consider Lambda Provisioned Concurrency for more predictable costs\n- Review DynamoDB read/write capacity to ensure right-sizing"
+}
