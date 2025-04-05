@@ -30,6 +30,7 @@ Time:        2.85 s
 ```
 
 [![CI Build Status](https://github.com/Brownster/ccp/workflows/Tests/badge.svg)](https://github.com/Brownster/ccp/actions)
+[![codecov](https://codecov.io/gh/Brownster/ccp/branch/main/graph/badge.svg)](https://codecov.io/gh/Brownster/ccp)
 
 ---
 
