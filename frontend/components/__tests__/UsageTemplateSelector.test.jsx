@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { UsageTemplateSelector } from '../UsageTemplateSelector';
 
 // Mock the UI components
-jest.mock('@/components/ui/card', () => ({
+jest.mock('../../src/components/ui/card', () => ({
   Card: ({ children, className, onClick }) => (
     <div data-testid="card" className={className} onClick={onClick}>{children}</div>
   ),
@@ -12,7 +12,7 @@ jest.mock('@/components/ui/card', () => ({
   ),
 }));
 
-jest.mock('@/components/ui/button', () => ({
+jest.mock('../../src/components/ui/button', () => ({
   Button: ({ children, onClick, disabled, variant }) => (
     <button 
       data-testid="button" 

@@ -4,13 +4,13 @@
 
 // Use environment variable for API URL or fallback to localhost
 let API_URL = 'http://localhost:8000';
-// Safe check for Vite environment
-try {
-  if (typeof import !== 'undefined' && import.meta && import.meta.env) {
-    API_URL = import.meta.env.VITE_API_URL || API_URL;
-  }
-} catch (e) {
-  // In test environment, this will fail, so we use the default
+
+// Safe check for environment
+// This approach works in both Vite and Jest environments
+if (typeof process !== 'undefined' && process.env && process.env.VITE_API_URL) {
+  API_URL = process.env.VITE_API_URL;
+} else if (typeof window !== 'undefined' && window.ENV && window.ENV.VITE_API_URL) {
+  API_URL = window.ENV.VITE_API_URL;
 }
 
 /**

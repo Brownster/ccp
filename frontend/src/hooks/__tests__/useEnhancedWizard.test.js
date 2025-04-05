@@ -246,15 +246,17 @@ describe('useEnhancedWizard hook', () => {
   });
   
   test('handleSkip sets default answer and advances', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => 
+    const { result } = renderHook(() => 
       useEnhancedWizard(mockResources, mockOnComplete)
     );
     
     // Open the wizard and wait for questions
-    act(() => {
-      result.current.openWizard();
+    await act(async () => {
+      await result.current.openWizard();
     });
-    await waitForNextUpdate();
+    
+    // Wait for state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     // Skip the first question
     act(() => {
