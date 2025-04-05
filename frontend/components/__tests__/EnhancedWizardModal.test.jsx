@@ -32,7 +32,7 @@ jest.mock('../UsageTemplateSelector', () => {
   };
 }, { virtual: true });
 
-// Mock the fetch function
+// Mock the fetch function and environment variables
 global.fetch = jest.fn(() =>
   Promise.resolve({
     ok: true,
@@ -44,6 +44,11 @@ global.fetch = jest.fn(() =>
     }),
   })
 );
+
+// Mock environment variables
+window.ENV = {
+  VITE_API_URL: 'http://localhost:8000'
+};
 
 // Mock localStorage
 const mockLocalStorage = (() => {

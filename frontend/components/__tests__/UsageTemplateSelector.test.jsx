@@ -2,27 +2,21 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { UsageTemplateSelector } from '../UsageTemplateSelector';
 
-// Mock the UI components
-jest.mock('../../src/components/ui/card', () => ({
-  Card: ({ children, className, onClick }) => (
-    <div data-testid="card" className={className} onClick={onClick}>{children}</div>
-  ),
-  CardContent: ({ children, className }) => (
-    <div data-testid="card-content" className={className}>{children}</div>
-  ),
-}));
-
-jest.mock('../../src/components/ui/button', () => ({
-  Button: ({ children, onClick, disabled, variant }) => (
-    <button 
-      data-testid="button" 
-      disabled={disabled} 
-      onClick={onClick}
-      className={variant}
-    >
-      {children}
-    </button>
-  ),
+// Mock API functions
+jest.mock('../../src/services/api', () => ({
+  getTemplates: jest.fn().mockResolvedValue([]),
+  applyTemplate: jest.fn().mockImplementation((id, resources) => {
+    // Simulate template data
+    const result = {};
+    resources.forEach(r => {
+      result[r.name] = {
+        monthly_hours: 160,
+        monthly_requests: 10000,
+        storage_gb: 100
+      };
+    });
+    return Promise.resolve(result);
+  })
 }));
 
 describe('UsageTemplateSelector component', () => {
