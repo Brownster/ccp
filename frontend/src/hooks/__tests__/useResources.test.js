@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { useResources } from '../useResources';
 import { uploadTerraform, getUsageAssumption } from '../../services/api';
 

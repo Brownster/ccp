@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { useUsageWizard } from '../useUsageWizard';
 import { getClarifyQuestions, generateUsage } from '../../services/api';
 
