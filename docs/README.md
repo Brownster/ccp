@@ -7,6 +7,7 @@ Welcome to the Cloud Cost Predictor documentation. This documentation provides c
 ### Overview
 
 - [Main README](../README.md) - Project overview and quickstart guide
+- [12-Month Roadmap](ROADMAP.md) - Strategic plan for delivering enterprise-grade FinOps capabilities
 
 ### Architecture and Design
 
